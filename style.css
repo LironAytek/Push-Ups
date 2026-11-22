@@ -1,0 +1,312 @@
+/* ==================================================================
+   FILE 2 OF 3 : style.css  (the look of the page)
+   ------------------------------------------------------------------
+   Sections:
+     1. DESIGN TOKENS   - colors, sizes, fonts   <- easiest place to restyle
+     2. BASE / RESET
+     3. LAYOUT & COMPONENTS (camera square, counter, buttons)
+        -> these make the app WORK. Edit carefully.
+     4. STATES          - classes that script.js adds/removes. Don't rename.
+     5. YOUR DESIGN ZONE - empty on purpose, put your own styling here
+   ================================================================== */
+
+
+/* ---------- 1. DESIGN TOKENS ---------- */
+:root {
+  /* Colors */
+  --color-bg: #14171c;
+  /* page background */
+  --color-surface: #1e232b;
+  /* cards / buttons */
+  --color-text: #f2f4f7;
+  /* main text */
+  --color-muted: #98a1ae;
+  /* secondary text */
+  --color-accent: #3ddc84;
+  /* progress bar, primary button, highlights */
+  --color-accent-ink: #06210f;
+  /* text on top of the accent color */
+  --color-danger: #ff5d5d;
+  --glow-red: rgba(255, 45, 85, 0.55);
+  --glow-blue: rgba(45, 107, 255, 0.5);
+
+  /* Fonts */
+  --font-main: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+  /* Camera square size: the SMALLER of 92% of screen width,
+     55% of screen height, or 520px. Change the numbers to resize. */
+  --camera-size: min(92vw, 55vh, 520px);
+  --camera-size: min(92vw, 55dvh, 520px);
+  /* newer phones: handles the address bar */
+
+  /* Shape */
+  --radius: 16px;
+  --gap: 16px;
+}
+
+
+/* ---------- 2. BASE / RESET ---------- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-main);
+  -webkit-text-size-adjust: 100%;
+  /* keeps content away from phone notches */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+
+/* ---------- 3. LAYOUT & COMPONENTS ---------- */
+
+/* Page column: everything stacked and centered. */
+.app {
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: var(--gap);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap);
+}
+
+.app-header {
+  text-align: center;
+}
+
+.app-title {
+  font-size: 1.5rem;
+}
+
+.app-subtitle {
+  color: var(--color-muted);
+  font-size: .9rem;
+  margin-top: 4px;
+}
+
+/* --- The square camera window --- */
+.camera-card {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.camera-square {
+  position: relative;
+  /* lets the message sit on top */
+  width: var(--camera-size);
+  aspect-ratio: 1 / 1;
+  /* <- this makes it a perfect square */
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: #000;
+}
+
+/* Video and drawing canvas sit exactly on top of each other.
+   IMPORTANT: keep both at inset:0 / 100% size and object-fit: cover,
+   otherwise the skeleton will not line up with the person. */
+.camera-stage {
+  position: absolute;
+  inset: 0;
+}
+
+.camera-stage video,
+.camera-stage canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.camera-stage video {
+  object-fit: cover;
+}
+
+/* Message on top of the camera (loading, countdown, errors) */
+.camera-message {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 16px;
+  font-size: 1.1rem;
+  background: rgba(0, 0, 0, .55);
+}
+
+.camera-message.is-countdown {
+  font-size: 5rem;
+  font-weight: 700;
+  background: rgba(0, 0, 0, .35);
+}
+
+/* --- Counter --- */
+.counter-card {
+  width: 100%;
+  max-width: var(--camera-size);
+  text-align: center;
+}
+
+.counter-numbers {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.counter-count {
+  font-size: 5rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--color-accent);
+}
+
+.counter-sep {
+  font-size: 2rem;
+  color: var(--color-muted);
+}
+
+.counter-target {
+  font-size: 2rem;
+  color: var(--color-muted);
+}
+
+.progress {
+  height: 10px;
+  margin: 12px 0;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--color-surface);
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  /* script.js sets this */
+  background: var(--color-accent);
+  transition: width .25s ease;
+}
+
+.status {
+  color: var(--color-muted);
+  min-height: 1.4em;
+}
+
+/* --- Buttons --- */
+.controls {
+  width: 100%;
+  max-width: var(--camera-size);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  /* 2 per row; change to 4 for one row on wide screens */
+  gap: 10px;
+}
+
+.btn {
+  font: inherit;
+  padding: 14px 12px;
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--glow-red), var(--glow-blue)) border-box;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+
+
+.btn:hover {
+  filter: brightness(1.35);
+}
+
+.btn:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
+  font-weight: 700;
+  grid-column: 1 / -1;
+}
+
+.btn.change {
+  grid-column: 1 / -1;
+  justify-self: center;
+  width: 100%;
+}
+
+.app-footer {
+  color: var(--color-muted);
+  font-size: .8rem;
+  text-align: center;
+}
+
+.debug {
+  font-variant-numeric: tabular-nums;
+}
+
+.copyright {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  padding: 1.5rem 1rem 2rem;
+  text-align: center;
+  font-size: 0.85rem;
+  color: grey;
+}
+
+/* ---------- 4. STATES (added/removed by script.js - do not rename) ---------- */
+
+/* Front camera is mirrored like a selfie. Applied to video + skeleton together. */
+.camera-stage.is-mirrored {
+  transform: scaleX(-1);
+}
+
+/* Hides an element (e.g. the camera message once the camera is running). */
+.is-hidden {
+  display: none !important;
+}
+
+/* Little "pop" every time a rep is counted. */
+.counter-count.bump {
+  animation: bump .25s ease;
+}
+
+@keyframes bump {
+  50% {
+    transform: scale(1.18);
+  }
+}
+
+/* Added to <body> when the goal is reached. Style it however you like! */
+body.is-goal-reached .counter-count {
+  color: #ffd54a;
+}
+
+body.is-goal-reached .progress-bar {
+  background: #ffd54a;
+}
+
+/* Respect users who turned off animations. */
+@media (prefers-reduced-motion: reduce) {
+  .counter-count.bump {
+    animation: none;
+  }
+
+  .progress-bar {
+    transition: none;
+  }
+}

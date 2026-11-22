@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Push-Up Counter</title>
+
+  <!-- ============================================================
+       FILE 1 OF 3 : index.html  (the page structure)
+       ------------------------------------------------------------
+       HOW THE 3 FILES CONNECT
+         index.html  -> loads style.css (look)  and  script.js (logic)
+         style.css   -> styles elements by their CLASS names
+         script.js   -> finds elements ONLY by their id="js-..." names
+
+       GOLDEN RULE (so your redesign never breaks the app):
+         * Elements with  id="js-..."  are used by script.js.
+           You may MOVE them, WRAP them, RESTYLE them, but do not
+           rename or delete them.
+         * Everything else (classes, headings, text, extra <div>s)
+           is yours to change freely.
+       ============================================================ -->
+
+  <link rel="stylesheet" href="style.css">
+
+  <!-- script.js is loaded HERE ON PURPOSE-->
+  <script src="script.js"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+  <link rel="manifest" href="favicon/site.webmanifest">
+</head>
+
+<body>
+  <div class="space" aria-hidden="true"></div>
+
+  <main class="app">
+
+    <!-- ===== DESIGN SLOT A: header (logo, title, tagline...) ===== -->
+    <header class="app-header">
+      <h1 class="app-title typing">Push-Up Counter</h1>
+      <p class="app-subtitle typed">Place your phone sideways to you, step back, and start.</p>
+    </header>
+
+    <!-- ===== CAMERA WINDOW (the square) =====
+         .camera-square  -> the square frame (size is set in style.css)
+         .camera-stage   -> holds video + skeleton drawing (keep together)
+         js-message      -> text on top of the camera ("Loading...", "3, 2, 1") -->
+    <section class="camera-card">
+      <div class="camera-square">
+        <div class="camera-stage" id="js-stage">
+          <video id="js-video" playsinline muted autoplay></video>
+          <canvas id="js-overlay"></canvas>
+        </div>
+        <div class="camera-message" id="js-message">Loading...</div>
+      </div>
+    </section>
+
+    <!-- ===== COUNTER =====
+         js-count    -> current reps
+         js-target   -> the number the user typed in the prompt
+         js-progress-bar -> fills from 0% to 100% of the goal
+         js-status   -> short helper text ("Go!", "Goal reached!"...) -->
+    <section class="counter-card">
+      <div class="counter-numbers">
+        <span class="counter-count" id="js-count">0</span>
+        <span class="counter-sep">/</span>
+        <span class="counter-target" id="js-target">0</span>
+      </div>
+
+      <div class="progress">
+        <div class="progress-bar" id="js-progress-bar"></div>
+      </div>
+
+      <p class="status" id="js-status">Loading model...</p>
+    </section>
+
+    <!-- ===== BUTTONS =====
+         Keep the ids. Change the text / order / look as you like. -->
+    <section class="controls">
+      <button class="btn btn-primary" id="js-start" disabled>Start</button>
+      <button class="btn" id="js-reset">Reset</button>
+      <button class="btn" id="js-switch-camera">Switch camera</button>
+      <button class="btn change" id="js-change-target">Change goal</button>
+    </section>
+
+    <!-- ===== DESIGN SLOT B: footer / extra info / ads / links ===== -->
+    <footer class="app-footer">
+      <!-- Debug line (angle + stage). Hide it by setting SHOW_DEBUG:false in script.js -->
+      <p class="debug" id="js-debug"></p>
+    </footer>
+
+    <footer class="copyright">© 2026 Liron Aytek. All rights reserved.</footer>
+
+
+  </main>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection@2.1.3/dist/pose-detection.min.js"></script>
+  <script src="typing.js"></script>
+</body>
+
+</html>
