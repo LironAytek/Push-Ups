@@ -1,51 +1,17 @@
-/* ==================================================================
-   FILE 2 OF 3 : style.css  (the look of the page)
-   ------------------------------------------------------------------
-   Sections:
-     1. DESIGN TOKENS   - colors, sizes, fonts   <- easiest place to restyle
-     2. BASE / RESET
-     3. LAYOUT & COMPONENTS (camera square, counter, buttons)
-        -> these make the app WORK. Edit carefully.
-     4. STATES          - classes that script.js adds/removes. Don't rename.
-     5. YOUR DESIGN ZONE - empty on purpose, put your own styling here
-   ================================================================== */
-
-
-/* ---------- 1. DESIGN TOKENS ---------- */
 :root {
-  /* Colors */
   --color-bg: #14171c;
-  /* page background */
   --color-surface: #1e232b;
-  /* cards / buttons */
+  --color-surface-raised: #252c36;
   --color-text: #f2f4f7;
-  /* main text */
   --color-muted: #98a1ae;
-  /* secondary text */
   --color-accent: #3ddc84;
-  /* progress bar, primary button, highlights */
   --color-accent-ink: #06210f;
-  /* text on top of the accent color */
-  --color-danger: #ff5d5d;
-  --glow-red: rgba(255, 45, 85, 0.55);
-  --glow-blue: rgba(45, 107, 255, 0.5);
-
-  /* Fonts */
-  --font-main: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-
-  /* Camera square size: the SMALLER of 92% of screen width,
-     55% of screen height, or 520px. Change the numbers to resize. */
-  --camera-size: min(92vw, 55vh, 520px);
-  --camera-size: min(92vw, 55dvh, 520px);
-  /* newer phones: handles the address bar */
-
-  /* Shape */
-  --radius: 16px;
+  --color-gold: #ffd54a;
+  --radius: 18px;
   --gap: 16px;
+  --font-main: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
 }
 
-
-/* ---------- 2. BASE / RESET ---------- */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -58,23 +24,23 @@ body {
 }
 
 body {
-  background: var(--color-bg);
+  min-height: 100svh;
+  overflow-x: hidden;
+  background: radial-gradient(ellipse at top, #202832 0%, var(--color-bg) 54%);
   color: var(--color-text);
   font-family: var(--font-main);
   -webkit-text-size-adjust: 100%;
-  /* keeps content away from phone notches */
   padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 
+button {
+  -webkit-tap-highlight-color: transparent;
+}
 
-/* ---------- 3. LAYOUT & COMPONENTS ---------- */
-
-/* Page column: everything stacked and centered. */
 .app {
-  width: 100%;
-  max-width: 640px;
+  width: min(100%, 780px);
   margin: 0 auto;
-  padding: var(--gap);
+  padding: clamp(12px, 3vw, 24px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -82,40 +48,44 @@ body {
 }
 
 .app-header {
+  width: 100%;
   text-align: center;
 }
 
 .app-title {
-  font-size: 1.5rem;
+  font-size: clamp(1.45rem, 4.6vw, 2rem);
+  line-height: 1.15;
+  letter-spacing: -0.035em;
 }
 
 .app-subtitle {
+  max-width: 42rem;
+  margin: 7px auto 0;
   color: var(--color-muted);
-  font-size: .9rem;
-  margin-top: 4px;
+  font-size: clamp(.85rem, 2.4vw, .98rem);
+  line-height: 1.45;
 }
 
-/* --- The square camera window --- */
 .camera-card {
   width: 100%;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
 }
 
+/* A large, square portrait-first viewport without a restrictive 55vh cap. */
 .camera-square {
   position: relative;
-  /* lets the message sit on top */
-  width: var(--camera-size);
+  width: min(100%, 680px);
   aspect-ratio: 1 / 1;
-  /* <- this makes it a perfect square */
   overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, .10);
   border-radius: var(--radius);
-  background: #000;
+  background: #050608;
+  box-shadow: 0 18px 55px rgba(0, 0, 0, .32), 0 0 0 1px rgba(61, 220, 132, .04);
 }
 
-/* Video and drawing canvas sit exactly on top of each other.
-   IMPORTANT: keep both at inset:0 / 100% size and object-fit: cover,
-   otherwise the skeleton will not line up with the person. */
 .camera-stage {
   position: absolute;
   inset: 0;
@@ -129,123 +99,157 @@ body {
   height: 100%;
 }
 
+/* Contain keeps the full body visible instead of cropping off limbs. */
 .camera-stage video {
-  object-fit: cover;
+  object-fit: contain;
+  background: #050608;
 }
 
-/* Message on top of the camera (loading, countdown, errors) */
+.camera-stage canvas {
+  pointer-events: none;
+}
+
 .camera-message {
   position: absolute;
   inset: 0;
+  z-index: 2;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 18px;
   text-align: center;
-  padding: 16px;
-  font-size: 1.1rem;
-  background: rgba(0, 0, 0, .55);
+  line-height: 1.4;
+  font-size: clamp(1rem, 3vw, 1.15rem);
+  font-weight: 600;
+  background: rgba(0, 0, 0, .52);
+  backdrop-filter: blur(2px);
 }
 
 .camera-message.is-countdown {
-  font-size: 5rem;
-  font-weight: 700;
-  background: rgba(0, 0, 0, .35);
+  font-size: clamp(4rem, 16vw, 6rem);
+  font-weight: 800;
+  color: var(--color-accent);
+  text-shadow: 0 0 30px rgba(61, 220, 132, .34);
+  background: rgba(0, 0, 0, .28);
 }
 
-/* --- Counter --- */
+.camera-guidance {
+  width: 100%;
+  max-width: 680px;
+  color: var(--color-muted);
+  font-size: .82rem;
+  line-height: 1.4;
+  text-align: center;
+}
+
 .counter-card {
   width: 100%;
-  max-width: var(--camera-size);
+  max-width: 680px;
   text-align: center;
+  padding: 2px 4px;
 }
 
 .counter-numbers {
   display: flex;
   justify-content: center;
   align-items: baseline;
-  gap: 10px;
+  gap: 11px;
+  font-variant-numeric: tabular-nums;
 }
 
 .counter-count {
-  font-size: 5rem;
-  font-weight: 800;
-  line-height: 1;
   color: var(--color-accent);
+  font-size: clamp(4rem, 16vw, 5.4rem);
+  font-weight: 850;
+  line-height: 1;
+  letter-spacing: -.055em;
 }
 
 .counter-sep {
-  font-size: 2rem;
   color: var(--color-muted);
+  font-size: 2rem;
 }
 
 .counter-target {
-  font-size: 2rem;
   color: var(--color-muted);
+  font-size: 2rem;
 }
 
 .progress {
-  height: 10px;
-  margin: 12px 0;
-  border-radius: 999px;
+  height: 11px;
+  margin: 13px 0 10px;
   overflow: hidden;
+  border-radius: 999px;
   background: var(--color-surface);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, .45);
 }
 
 .progress-bar {
-  height: 100%;
   width: 0%;
-  /* script.js sets this */
-  background: var(--color-accent);
-  transition: width .25s ease;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #26b96b, var(--color-accent));
+  box-shadow: 0 0 14px rgba(61, 220, 132, .35);
+  transition: width .28s ease;
 }
 
 .status {
-  color: var(--color-muted);
   min-height: 1.4em;
+  color: var(--color-muted);
+  font-size: .95rem;
 }
 
-/* --- Buttons --- */
 .controls {
   width: 100%;
-  max-width: var(--camera-size);
+  max-width: 680px;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  /* 2 per row; change to 4 for one row on wide screens */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
 }
 
 .btn {
-  font: inherit;
-  padding: 14px 12px;
-  border: 0;
-  border-radius: 12px;
-  background: linear-gradient(135deg, var(--glow-red), var(--glow-blue)) border-box;
+  min-height: 48px;
+  padding: 12px 14px;
+  border: 1px solid rgba(255, 255, 255, .08);
+  border-radius: 13px;
+  background: linear-gradient(145deg, #2b333e, #202630);
   color: var(--color-text);
+  font: inherit;
+  font-size: .95rem;
+  font-weight: 650;
   cursor: pointer;
+  transition: transform .15s ease, filter .15s ease, border-color .15s ease;
 }
 
+.btn:hover:not(:disabled) {
+  filter: brightness(1.15);
+  border-color: rgba(255, 255, 255, .18);
+}
 
+.btn:active:not(:disabled) {
+  transform: scale(.98);
+}
 
-.btn:hover {
-  filter: brightness(1.35);
+.btn:focus-visible {
+  outline: 3px solid rgba(61, 220, 132, .55);
+  outline-offset: 2px;
 }
 
 .btn:disabled {
-  opacity: .45;
+  opacity: .48;
   cursor: not-allowed;
 }
 
 .btn-primary {
-  background: var(--color-accent);
-  color: var(--color-accent-ink);
-  font-weight: 700;
   grid-column: 1 / -1;
+  background: linear-gradient(135deg, #54eda0, #2fc979);
+  color: var(--color-accent-ink);
+  border-color: transparent;
+  font-weight: 800;
 }
 
 .btn.change {
   grid-column: 1 / -1;
-  justify-self: center;
-  width: 100%;
 }
 
 .app-footer {
@@ -259,54 +263,115 @@ body {
 }
 
 .copyright {
-  position: relative;
-  z-index: 1;
-  margin: 0;
-  padding: 1.5rem 1rem 2rem;
+  padding: 4px 8px 12px;
+  color: #7e8793;
+  font-size: .78rem;
   text-align: center;
-  font-size: 0.85rem;
-  color: grey;
 }
 
-/* ---------- 4. STATES (added/removed by script.js - do not rename) ---------- */
-
-/* Front camera is mirrored like a selfie. Applied to video + skeleton together. */
-.camera-stage.is-mirrored {
-  transform: scaleX(-1);
-}
-
-/* Hides an element (e.g. the camera message once the camera is running). */
 .is-hidden {
   display: none !important;
 }
 
-/* Little "pop" every time a rep is counted. */
+.camera-stage.is-mirrored {
+  transform: scaleX(-1);
+}
+
 .counter-count.bump {
   animation: bump .25s ease;
 }
 
-@keyframes bump {
-  50% {
-    transform: scale(1.18);
-  }
-}
-
-/* Added to <body> when the goal is reached. Style it however you like! */
 body.is-goal-reached .counter-count {
-  color: #ffd54a;
+  color: var(--color-gold);
 }
 
 body.is-goal-reached .progress-bar {
-  background: #ffd54a;
+  background: linear-gradient(90deg, #f5b93b, var(--color-gold));
+  box-shadow: 0 0 18px rgba(255, 213, 74, .38);
 }
 
-/* Respect users who turned off animations. */
-@media (prefers-reduced-motion: reduce) {
-  .counter-count.bump {
-    animation: none;
+.confetti-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.caret {
+  display: inline-block;
+  width: 2px;
+  height: .9em;
+  margin-left: 3px;
+  vertical-align: -.08em;
+  background: var(--color-accent);
+  animation: blink .8s steps(2, start) infinite;
+}
+
+@keyframes blink {
+  to { opacity: 0; }
+}
+
+@keyframes bump {
+  50% { transform: scale(1.16); }
+}
+
+/* Compact two-column layout for a phone held in landscape. The camera gets
+   a large, height-aware area and the controls remain beside it. */
+@media (orientation: landscape) and (min-width: 620px) and (max-height: 620px) {
+  .app {
+    width: 100%;
+    max-width: 1180px;
+    min-height: 100svh;
+    margin: 0 auto;
+    padding: 10px 16px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(230px, .8fr);
+    grid-template-areas:
+      "camera header"
+      "camera counter"
+      "camera controls"
+      "camera footer"
+      "camera copyright";
+    align-content: center;
+    align-items: center;
+    gap: 8px 22px;
   }
 
-  .progress-bar {
-    transition: none;
+  .app-header { grid-area: header; }
+  .camera-card { grid-area: camera; align-self: center; }
+  .counter-card { grid-area: counter; }
+  .controls { grid-area: controls; }
+  .app-footer { grid-area: footer; }
+  .copyright { grid-area: copyright; }
+
+  .camera-square {
+    width: min(100%, 104svh);
+    max-width: 100%;
+    aspect-ratio: 4 / 3;
+  }
+
+  .camera-guidance { font-size: .76rem; }
+  .app-title { font-size: clamp(1.2rem, 3vw, 1.7rem); }
+  .app-subtitle { font-size: .82rem; }
+  .counter-count { font-size: clamp(3rem, 10svh, 4.5rem); }
+  .progress { margin: 8px 0; }
+  .btn { min-height: 42px; padding: 9px 10px; font-size: .88rem; }
+  .copyright { padding: 0; }
+}
+
+@media (max-width: 360px) {
+  .app { padding: 10px; gap: 12px; }
+  .camera-square { border-radius: 14px; }
+  .btn { min-height: 45px; padding-inline: 8px; font-size: .88rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
   }
 }
