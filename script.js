@@ -583,30 +583,6 @@ function launchConfetti() {
   state.confettiFrame = requestAnimationFrame(animateConfetti);
 }
 
-// Keep the existing heading type-on effect without requiring a fourth JS file.
-function runTypingEffect() {
-  const heading = document.querySelector('.typing');
-  if (!heading || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const fullText = heading.textContent.trim();
-  heading.setAttribute('aria-label', fullText);
-  const typed = document.createElement('span');
-  const caret = document.createElement('span');
-  typed.setAttribute('aria-hidden', 'true');
-  caret.setAttribute('aria-hidden', 'true');
-  caret.className = 'caret';
-  heading.textContent = '';
-  heading.append(typed, caret);
-  let index = 0;
-  const timer = window.setInterval(() => {
-    index += 1;
-    typed.textContent = fullText.slice(0, index);
-    if (index >= fullText.length) {
-      window.clearInterval(timer);
-      window.setTimeout(() => caret.remove(), 450);
-    }
-  }, 35);
-}
-
 /* ==================================================================
    J. UI UPDATES
    ================================================================== */
@@ -762,3 +738,4 @@ async function init() {
 // The AI libraries are loaded immediately before this file, and all page
 // elements are parsed before DOMContentLoaded fires.
 document.addEventListener('DOMContentLoaded', init);
+
