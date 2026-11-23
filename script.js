@@ -710,7 +710,6 @@ function onChangeTarget() {
    L. START-UP  (runs when the page is ready)
    ================================================================== */
 async function init() {
-  runTypingEffect();
   findElements();
   updateCounterUI(false);
   showMessage(CONFIG.TEXT.loadingModel);
@@ -738,4 +737,5 @@ async function init() {
 // The AI libraries are loaded immediately before this file, and all page
 // elements are parsed before DOMContentLoaded fires.
 document.addEventListener('DOMContentLoaded', init);
+
 
