@@ -9,3 +9,4 @@ Camera window: In the middle of the page you will encounter a black square scree
 
 Disclaimer: This simple project is part of my Academic learning to help myself to sum up and learn even more to gain experience, this project was made by me with some help of "Claude Code".
 This WebApp is just an idea that came on top of my head for fun to help me enjoy my push-ups at home.
+*Free source picture*
