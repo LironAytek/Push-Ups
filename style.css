@@ -123,7 +123,7 @@ button {
   color: var(--color-text);
   font-weight: 600;
   /* background: rgba(0, 0, 0, .52); */
-  background-image: url("pexels-ivan-s-4162494.jpg");
+  background-image: url("assets/pexels-ivan-s-4162494.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   backdrop-filter: blur(2px);
